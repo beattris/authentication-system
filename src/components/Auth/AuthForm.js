@@ -55,7 +55,10 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        authCtx.login(data.idToken);
+        // deriving the expiration time. The + in '+data.expiresIn' is used to change the detail to a number, then 
+        // multiplied by 1000 to change it from secs to milisecs.
+        const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000));
+        authCtx.login(data.idToken, expirationTime.toString());
         history.replace('/');
       })
       .catch((err) => {
